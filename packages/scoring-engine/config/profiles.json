@@ -1,0 +1,167 @@
+[
+  {
+    "id": "walking",
+    "label": "Walking",
+    "factors": [
+      {
+        "factorId": "open-places",
+        "label": "Open places along the route",
+        "maxPoints": 25,
+        "options": { "targetOpenPlacesPerKm": 6, "maxDistanceFromRouteM": 150 }
+      },
+      {
+        "factorId": "main-roads",
+        "label": "Distance on main roads",
+        "maxPoints": 15,
+        "options": { "targetShare": 0.8 }
+      },
+      {
+        "factorId": "help-points",
+        "label": "Open help points nearby",
+        "maxPoints": 15,
+        "options": { "maxDistanceFromRouteM": 400, "targetWeightedPerKm": 1.5 }
+      },
+      {
+        "factorId": "coverage-gaps",
+        "label": "Fewer gaps between open places",
+        "maxPoints": 15,
+        "options": { "maxAcceptableGapM": 600, "maxDistanceFromRouteM": 150 }
+      },
+      {
+        "factorId": "transport",
+        "label": "Transport locations listed open",
+        "maxPoints": 10,
+        "options": { "maxDistanceFromRouteM": 300, "targetPerKm": 1 }
+      },
+      {
+        "factorId": "turns",
+        "label": "Fewer turns",
+        "maxPoints": 10,
+        "options": { "significantTurnDeg": 45, "maxTurnsPerKm": 4 }
+      },
+      {
+        "factorId": "surveillance",
+        "label": "Mapped surveillance coverage",
+        "maxPoints": 5,
+        "options": { "maxDistanceFromRouteM": 100, "targetCamerasPerKm": 2 }
+      },
+      {
+        "factorId": "community-reports",
+        "label": "Community feedback",
+        "maxPoints": 5,
+        "minConfidence": 0.3,
+        "options": { "maxDistanceFromRouteM": 200 }
+      }
+    ]
+  },
+  {
+    "id": "cycling",
+    "label": "Cycling",
+    "factors": [
+      {
+        "factorId": "open-places",
+        "label": "Open places along the route",
+        "maxPoints": 20,
+        "options": { "targetOpenPlacesPerKm": 5, "maxDistanceFromRouteM": 200 }
+      },
+      {
+        "factorId": "main-roads",
+        "label": "Distance on main roads",
+        "maxPoints": 20,
+        "options": { "targetShare": 0.75 }
+      },
+      {
+        "factorId": "help-points",
+        "label": "Open help points nearby",
+        "maxPoints": 12,
+        "options": { "maxDistanceFromRouteM": 600, "targetWeightedPerKm": 1.2 }
+      },
+      {
+        "factorId": "coverage-gaps",
+        "label": "Fewer gaps between open places",
+        "maxPoints": 15,
+        "options": { "maxAcceptableGapM": 1000, "maxDistanceFromRouteM": 200 }
+      },
+      {
+        "factorId": "transport",
+        "label": "Transport locations listed open",
+        "maxPoints": 8,
+        "options": { "maxDistanceFromRouteM": 400, "targetPerKm": 0.8 }
+      },
+      {
+        "factorId": "turns",
+        "label": "Fewer turns",
+        "maxPoints": 10,
+        "options": { "significantTurnDeg": 45, "maxTurnsPerKm": 3 }
+      },
+      {
+        "factorId": "surveillance",
+        "label": "Mapped surveillance coverage",
+        "maxPoints": 8,
+        "options": { "maxDistanceFromRouteM": 150, "targetCamerasPerKm": 2 }
+      },
+      {
+        "factorId": "community-reports",
+        "label": "Community feedback",
+        "maxPoints": 7,
+        "minConfidence": 0.3,
+        "options": { "maxDistanceFromRouteM": 250 }
+      }
+    ]
+  },
+  {
+    "id": "driving",
+    "label": "Driving",
+    "factors": [
+      {
+        "factorId": "open-places",
+        "label": "Open places along the route",
+        "maxPoints": 12,
+        "options": { "targetOpenPlacesPerKm": 3, "maxDistanceFromRouteM": 300 }
+      },
+      {
+        "factorId": "main-roads",
+        "label": "Distance on main roads",
+        "maxPoints": 30,
+        "options": { "targetShare": 0.9 }
+      },
+      {
+        "factorId": "help-points",
+        "label": "Open help points nearby",
+        "maxPoints": 18,
+        "options": { "maxDistanceFromRouteM": 1000, "targetWeightedPerKm": 1 }
+      },
+      {
+        "factorId": "coverage-gaps",
+        "label": "Fewer gaps between open places",
+        "maxPoints": 10,
+        "options": { "maxAcceptableGapM": 2500, "maxDistanceFromRouteM": 300 }
+      },
+      {
+        "factorId": "transport",
+        "label": "Transport locations listed open",
+        "maxPoints": 2,
+        "options": { "maxDistanceFromRouteM": 500, "targetPerKm": 0.5 }
+      },
+      {
+        "factorId": "turns",
+        "label": "Fewer turns",
+        "maxPoints": 8,
+        "options": { "significantTurnDeg": 45, "maxTurnsPerKm": 2 }
+      },
+      {
+        "factorId": "surveillance",
+        "label": "Mapped surveillance coverage",
+        "maxPoints": 12,
+        "options": { "maxDistanceFromRouteM": 150, "targetCamerasPerKm": 1.5 }
+      },
+      {
+        "factorId": "community-reports",
+        "label": "Community feedback",
+        "maxPoints": 8,
+        "minConfidence": 0.3,
+        "options": { "maxDistanceFromRouteM": 300 }
+      }
+    ]
+  }
+]

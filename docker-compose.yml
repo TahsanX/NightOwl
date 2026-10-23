@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: saferoute
+      POSTGRES_PASSWORD: saferoute
+      POSTGRES_DB: saferoute
+    ports:
+      - '5432:5432'
+    volumes:
+      - saferoute-db:/var/lib/postgresql/data
+      - ./apps/backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U saferoute']
+      interval: 5s
+      retries: 10
+
+volumes:
+  saferoute-db:

@@ -1,0 +1,210 @@
+[
+  {
+    "id": "hospital",
+    "label": "Hospital",
+    "mapIcon": "hospital",
+    "mapColor": "#E5484D",
+    "tier": "assistance",
+    "weight": 3,
+    "assumedHours": "24/7",
+    "providerQueries": {
+      "geoapify": ["healthcare.hospital"],
+      "overpass": ["amenity=hospital"]
+    }
+  },
+  {
+    "id": "clinic",
+    "label": "Clinic",
+    "mapIcon": "doctor",
+    "mapColor": "#E93D82",
+    "tier": "assistance",
+    "weight": 1.5,
+    "providerQueries": {
+      "geoapify": ["healthcare.clinic"],
+      "overpass": ["amenity=clinic", "amenity=doctors"]
+    }
+  },
+  {
+    "id": "police",
+    "label": "Police station",
+    "mapIcon": "police",
+    "mapColor": "#3E63DD",
+    "tier": "assistance",
+    "weight": 3,
+    "assumedHours": "24/7",
+    "providerQueries": {
+      "geoapify": ["service.police"],
+      "overpass": ["amenity=police"]
+    }
+  },
+  {
+    "id": "fire_station",
+    "label": "Fire station",
+    "mapIcon": "fire-station",
+    "mapColor": "#D6409F",
+    "tier": "assistance",
+    "weight": 2.5,
+    "assumedHours": "24/7",
+    "providerQueries": {
+      "geoapify": ["emergency.fire_station"],
+      "overpass": ["amenity=fire_station"]
+    }
+  },
+  {
+    "id": "pharmacy",
+    "label": "Pharmacy",
+    "mapIcon": "pharmacy",
+    "mapColor": "#30A46C",
+    "tier": "assistance",
+    "weight": 2,
+    "providerQueries": {
+      "geoapify": ["healthcare.pharmacy"],
+      "overpass": ["amenity=pharmacy", "shop=chemist"]
+    }
+  },
+  {
+    "id": "fuel",
+    "label": "Petrol station",
+    "mapIcon": "fuel",
+    "mapColor": "#F76808",
+    "tier": "assistance",
+    "weight": 2,
+    "providerQueries": {
+      "geoapify": ["service.vehicle.fuel"],
+      "overpass": ["amenity=fuel"]
+    }
+  },
+  {
+    "id": "hotel",
+    "label": "Hotel",
+    "mapIcon": "lodging",
+    "mapColor": "#8E4EC6",
+    "tier": "assistance",
+    "weight": 1.5,
+    "assumedHours": "24/7",
+    "providerQueries": {
+      "geoapify": ["accommodation.hotel"],
+      "overpass": ["tourism=hotel", "tourism=guest_house"]
+    }
+  },
+  {
+    "id": "supermarket",
+    "label": "Supermarket",
+    "mapIcon": "grocery",
+    "mapColor": "#0D9488",
+    "tier": "activity",
+    "weight": 1.5,
+    "providerQueries": {
+      "geoapify": ["commercial.supermarket"],
+      "overpass": ["shop=supermarket"]
+    }
+  },
+  {
+    "id": "convenience",
+    "label": "Grocery / convenience shop",
+    "mapIcon": "shop",
+    "mapColor": "#F5A524",
+    "tier": "activity",
+    "weight": 1,
+    "providerQueries": {
+      "geoapify": ["commercial.convenience"],
+      "overpass": ["shop=convenience", "shop=general", "shop=kiosk"]
+    }
+  },
+  {
+    "id": "retail",
+    "label": "Retail store",
+    "mapIcon": "shop",
+    "mapColor": "#CF9F02",
+    "tier": "activity",
+    "weight": 0.8,
+    "providerQueries": {
+      "geoapify": ["commercial"],
+      "overpass": ["shop=clothes", "shop=electronics", "shop=hardware", "shop=mall"]
+    }
+  },
+  {
+    "id": "restaurant",
+    "label": "Restaurant",
+    "mapIcon": "restaurant",
+    "mapColor": "#E54D2E",
+    "tier": "activity",
+    "weight": 1.2,
+    "providerQueries": {
+      "geoapify": ["catering.restaurant"],
+      "overpass": ["amenity=restaurant"]
+    }
+  },
+  {
+    "id": "fast_food",
+    "label": "Fast food",
+    "mapIcon": "fast-food",
+    "mapColor": "#FFB224",
+    "tier": "activity",
+    "weight": 1.2,
+    "providerQueries": {
+      "geoapify": ["catering.fast_food"],
+      "overpass": ["amenity=fast_food"]
+    }
+  },
+  {
+    "id": "cafe",
+    "label": "Cafe / tea stall",
+    "mapIcon": "cafe",
+    "mapColor": "#AD7F58",
+    "tier": "activity",
+    "weight": 1,
+    "providerQueries": {
+      "geoapify": ["catering.cafe"],
+      "overpass": ["amenity=cafe"]
+    }
+  },
+  {
+    "id": "bank_atm",
+    "label": "Bank / ATM",
+    "mapIcon": "bank",
+    "mapColor": "#5B5BD6",
+    "tier": "activity",
+    "weight": 0.8,
+    "providerQueries": {
+      "geoapify": ["service.financial.bank", "service.financial.atm"],
+      "overpass": ["amenity=bank", "amenity=atm"]
+    }
+  },
+  {
+    "id": "office",
+    "label": "Office",
+    "mapIcon": "commercial",
+    "mapColor": "#6E7681",
+    "tier": "activity",
+    "weight": 0.5,
+    "providerQueries": {
+      "geoapify": ["office"],
+      "overpass": ["office=*"]
+    }
+  },
+  {
+    "id": "bus_stop",
+    "label": "Bus stop",
+    "mapIcon": "bus",
+    "mapColor": "#00A2C7",
+    "tier": "transport",
+    "weight": 1,
+    "providerQueries": {
+      "geoapify": ["public_transport.bus"],
+      "overpass": ["highway=bus_stop", "amenity=bus_station"]
+    }
+  },
+  {
+    "id": "station",
+    "label": "Station",
+    "mapIcon": "rail",
+    "mapColor": "#0588F0",
+    "tier": "transport",
+    "weight": 1.5,
+    "providerQueries": {
+      "geoapify": ["public_transport.train", "public_transport.subway"],
+      "overpass": ["railway=station", "railway=halt"]
+    }
+  }
+]
