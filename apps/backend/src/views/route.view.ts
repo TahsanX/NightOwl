@@ -35,6 +35,8 @@ interface CardFlags {
 }
 
 function routeCardView(route: ScoredRoute, flags: CardFlags): RouteCardView {
+  const possiblePoints = route.score.factors.reduce((sum, f) => sum + f.maxPoints, 0);
+
   return {
     id: route.id,
     geometry: route.geometry,
@@ -48,6 +50,12 @@ function routeCardView(route: ScoredRoute, flags: CardFlags): RouteCardView {
     score: {
       total: route.score.total,
       outOf: 100,
+      dataCoverage:
+        possiblePoints === 0
+          ? 0
+          : Math.round((route.score.effectiveMaxPoints / possiblePoints) * 100) / 100,
+      judgedFactorCount: route.score.factors.filter((f) => !f.excluded).length,
+      factorCount: route.score.factors.length,
       caption: 'Activity points · not a safety rating',
       disclaimer: route.score.disclaimer,
       // Ordered high-to-low so the breakdown sheet reads as a ranking of what

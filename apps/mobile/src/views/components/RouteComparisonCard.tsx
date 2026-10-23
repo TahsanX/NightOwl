@@ -3,6 +3,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { RouteCardView } from '@saferoute/shared-types';
 import { scoreColor, theme } from '../theme';
 
+/** Below this share of judged points, the card warns that the score is thin. */
+const LIMITED_DATA_THRESHOLD = 0.6;
+
 interface Props {
   route: RouteCardView;
   rank: number;
@@ -56,6 +59,13 @@ export function RouteComparisonCard({
         </View>
       </View>
 
+      {route.score.dataCoverage < LIMITED_DATA_THRESHOLD && (
+        <Text style={styles.limitedData}>
+          Limited data here: only {route.score.judgedFactorCount} of {route.score.factorCount}{' '}
+          factors could be judged.
+        </Text>
+      )}
+
       <Pressable onPress={onShowBreakdown} hitSlop={8}>
         <Text style={styles.link}>A closer look at this route</Text>
       </Pressable>
@@ -100,4 +110,5 @@ const styles = StyleSheet.create({
   duration: { color: theme.colors.text, fontSize: 24, fontWeight: '700', marginTop: 4 },
   caption: { color: theme.colors.textMuted, fontSize: 12 },
   link: { color: theme.colors.accent, fontSize: 13, fontWeight: '600' },
+  limitedData: { color: theme.colors.scoreMid, fontSize: 12, lineHeight: 17 },
 });

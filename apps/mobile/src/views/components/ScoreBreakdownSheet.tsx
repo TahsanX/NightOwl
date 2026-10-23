@@ -30,6 +30,11 @@ export function ScoreBreakdownSheet({ route, visible, onClose }: Props) {
 
           <Text style={styles.sectionTitle}>What goes into this score</Text>
           <Text style={styles.disclaimer}>{route.score.disclaimer}</Text>
+          <Text style={styles.disclaimer}>
+            Based on {route.score.judgedFactorCount} of {route.score.factorCount} factors (
+            {Math.round(route.score.dataCoverage * 100)}% of possible points). The rest had too
+            little data in this area to judge.
+          </Text>
 
           <ScrollView contentContainerStyle={styles.list}>
             {route.score.breakdown.map((item) => (

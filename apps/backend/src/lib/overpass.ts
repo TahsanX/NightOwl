@@ -43,7 +43,7 @@ export function elementPosition(element: OverpassElement): [number, number] | un
  * a misbehaving client instead of blocking a whole network. Some instances
  * reject anonymous requests outright with 406.
  */
-const USER_AGENT = 'SafeRoute/0.1 (open source; https://github.com/saferoute/saferoute)';
+const USER_AGENT = 'SafeRoute/0.1 (open source; https://github.com/TahsanX/NightOwl)';
 
 /**
  * Server-side execution budget Overpass is asked for. A single tag filter over

@@ -88,6 +88,7 @@ export async function createContainer(
     cameraService,
     reports,
     engine,
+    env.OPTIONAL_LAYER_BUDGET_MS,
   );
 
   return {

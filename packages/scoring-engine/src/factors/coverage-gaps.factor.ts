@@ -2,6 +2,7 @@ import type { FactorResult } from '@saferoute/shared-types';
 import { clamp01, distanceAlongRouteM } from '../geo.js';
 import { numberOption } from '../options.js';
 import type { FactorEnvironment, ScoreFactor } from '../types.js';
+import { knownHoursConfidence } from './confidence.js';
 
 /**
  * "Fewer gaps between open places" — a route can have plenty of open places in
@@ -19,8 +20,9 @@ export const coverageGapsFactor: ScoreFactor = {
     const maxAcceptableGapM = numberOption(env.options, 'maxAcceptableGapM', 600);
     const maxDistanceM = numberOption(env.options, 'maxDistanceFromRouteM', 150);
 
-    const openPositions = context.pois
-      .filter((poi) => poi.openingState === 'open' && poi.distanceFromRouteM <= maxDistanceM)
+    const nearby = context.pois.filter((poi) => poi.distanceFromRouteM <= maxDistanceM);
+    const openPositions = nearby
+      .filter((poi) => poi.openingState === 'open')
       .map((poi) => distanceAlongRouteM(context.route.geometry, poi.position))
       .sort((a, b) => a - b);
 
@@ -37,10 +39,12 @@ export const coverageGapsFactor: ScoreFactor = {
     return {
       factorId: 'coverage-gaps',
       value,
-      confidence: context.pois.length === 0 ? 0.2 : 0.8,
+      // A gap is only meaningful if we know the places either side of it are
+      // closed rather than untagged.
+      confidence: knownHoursConfidence(nearby),
       explanation:
-        longestGapM >= total
-          ? 'No open places were found along this route, so the whole stretch is unbroken.'
+        openPositions.length === 0
+          ? 'No place along this route is listed as open when you pass it.'
           : `The longest stretch without an open place is about ${Math.round(longestGapM)} m.`,
       details: {
         longestGapM: Math.round(longestGapM),

@@ -127,6 +127,28 @@ test('unknown opening hours never count as closed', () => {
   assert.ok(openPlaces(unknown).confidence <= openPlaces(closed).confidence);
 });
 
+test('a street of places with untagged hours is not scored as a dead street', () => {
+  // Regression: measured in central Dhaka, ~75% of places carry no opening
+  // hours. Those factors must drop out, not score 0 and drag the total down.
+  const untagged = engine.score(
+    context({
+      pois: [
+        poi('a', 'restaurant', 0.1, 'unknown'),
+        poi('b', 'cafe', 0.3, 'unknown'),
+        poi('c', 'convenience', 0.5, 'unknown'),
+        poi('d', 'supermarket', 0.7, 'unknown'),
+        poi('e', 'fast_food', 0.9, 'unknown'),
+      ],
+    }),
+    'walking',
+  );
+  const factor = (id: string) => untagged.factors.find((f) => f.factorId === id)!;
+
+  assert.equal(factor('open-places').excluded, true);
+  assert.equal(factor('coverage-gaps').excluded, true);
+  assert.equal(untagged.total, engine.score(context(), 'walking').total);
+});
+
 test('one long empty stretch is penalised even when totals look fine', () => {
   const clustered = engine.score(
     context({

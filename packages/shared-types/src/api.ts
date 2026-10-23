@@ -29,6 +29,14 @@ export interface ScoreBreakdownItem {
 export interface RouteScoreView {
   total: number;
   outOf: number;
+  /**
+   * 0..1 — share of the possible points that had enough data to be judged.
+   * A 67 built on a third of the factors must not read like a 67 built on all
+   * of them; clients are expected to say so when this is low.
+   */
+  dataCoverage: number;
+  judgedFactorCount: number;
+  factorCount: number;
   caption: string;
   disclaimer: string;
   breakdown: ScoreBreakdownItem[];

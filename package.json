@@ -4,12 +4,17 @@
   "private": true,
   "description": "Safety-first navigation that scores routes by nearby open activity and assistance points.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TahsanX/NightOwl.git"
+  },
+  "bugs": "https://github.com/TahsanX/NightOwl/issues",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @saferoute/shared-types && npm run build -w @saferoute/scoring-engine && npm run build -w @saferoute/backend",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "dev:backend": "npm run dev --workspace @saferoute/backend",

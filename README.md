@@ -7,7 +7,7 @@ its full reasoning.
 The headline number is the **Night Activity Score** (0–100). It is an activity estimate,
 not a safety rating, and the app always shows what produced it.
 
-```
+```text
 Fastest route · 10 min   Night Activity Score 27/100   18 places listed as open
 Higher activity · 12 min Night Activity Score 63/100   50 places listed as open
 ```
@@ -24,7 +24,7 @@ Higher activity · 12 min Night Activity Score 63/100   50 places listed as open
 
 ## Repository layout
 
-```
+```text
 apps/
   backend/          Express API, MVC (see ARCHITECTURE.md)
   mobile/           Expo + MapLibre app
@@ -38,6 +38,8 @@ packages/
 Requires Node 22+.
 
 ```bash
+git clone https://github.com/TahsanX/NightOwl.git
+cd NightOwl
 npm install
 cp apps/backend/.env.example apps/backend/.env   # works unchanged, no API key needed
 npm run dev:backend                              # http://localhost:4000/health

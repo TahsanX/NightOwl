@@ -20,7 +20,7 @@
     "tier": "assistance",
     "weight": 1.5,
     "providerQueries": {
-      "geoapify": ["healthcare.clinic"],
+      "geoapify": ["healthcare.clinic_or_praxis"],
       "overpass": ["amenity=clinic", "amenity=doctors"]
     }
   },
@@ -46,7 +46,7 @@
     "weight": 2.5,
     "assumedHours": "24/7",
     "providerQueries": {
-      "geoapify": ["emergency.fire_station"],
+      "geoapify": ["service.fire_station"],
       "overpass": ["amenity=fire_station"]
     }
   },

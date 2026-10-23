@@ -26,6 +26,7 @@ const schema = z.object({
   PLACES_CACHE_TTL_S: z.coerce.number().default(900),
   CAMERAS_CACHE_TTL_S: z.coerce.number().default(86_400),
   UPSTREAM_TIMEOUT_MS: z.coerce.number().default(120_000),
+  OPTIONAL_LAYER_BUDGET_MS: z.coerce.number().default(5_000),
 });
 
 export type Env = z.infer<typeof schema>;

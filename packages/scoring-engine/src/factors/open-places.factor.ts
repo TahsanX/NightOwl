@@ -2,6 +2,7 @@ import type { EvaluatedPoi, FactorResult } from '@saferoute/shared-types';
 import { clamp01 } from '../geo.js';
 import type { FactorEnvironment, ScoreFactor } from '../types.js';
 import { numberOption } from '../options.js';
+import { knownHoursConfidence } from './confidence.js';
 
 /**
  * "Open places along the route" — how much ordinary activity (shops, food,
@@ -34,7 +35,7 @@ export const openPlacesFactor: ScoreFactor = {
     return {
       factorId: 'open-places',
       value,
-      confidence: confidenceFromKnownHours(nearby),
+      confidence: knownHoursConfidence(nearby),
       explanation: `${open.length} of ${nearby.length} listed places near this route are expected to be open as you pass.`,
       details: {
         openCount: open.length,
@@ -48,15 +49,4 @@ export const openPlacesFactor: ScoreFactor = {
 function isScored(poi: EvaluatedPoi, env: FactorEnvironment): boolean {
   const tier = env.categories.get(poi.categoryId)?.tier;
   return tier === 'activity' || tier === 'assistance';
-}
-
-/**
- * Confidence tracks how much opening-hours data actually existed. An area where
- * nothing is tagged yields a low-confidence result, which the engine drops from
- * the total instead of scoring the route down for being unmapped.
- */
-function confidenceFromKnownHours(pois: EvaluatedPoi[]): number {
-  if (pois.length === 0) return 0.2;
-  const known = pois.filter((poi) => poi.openingState !== 'unknown').length;
-  return clamp01(0.3 + 0.7 * (known / pois.length));
 }

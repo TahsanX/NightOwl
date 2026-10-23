@@ -43,6 +43,8 @@ export class RoutePlanningService {
     private readonly cameraService: CameraService,
     private readonly reports: CommunityReportRepository,
     private readonly engine: ScoringEngine,
+    /** How long the plan waits for an optional layer before scoring without it. */
+    private readonly optionalLayerBudgetMs: number,
   ) {}
 
   async plan(request: PlanRouteRequest): Promise<RoutePlan> {
@@ -60,13 +62,15 @@ export class RoutePlanningService {
       routes.map((route) => boundingBoxOf(route.geometry, buffer)),
     );
 
-    // Contextual layers are optional: if a provider is down or rate limited the
-    // plan still returns, and the affected factors drop out of the score for
-    // lack of confidence instead of reporting a falsely low number.
+    // Contextual layers are optional: if a provider is down, rate limited or
+    // just slow, the plan still returns on time and the affected factors drop
+    // out of the score for lack of confidence instead of reporting a falsely
+    // low number. A slow fetch keeps running and warms the cache for next time.
+    const budget = this.optionalLayerBudgetMs;
     const [pois, cameras, reportSummaries] = await Promise.all([
       this.poiService.findInArea(area),
-      optional(this.cameraService.findInArea(area), [] as SurveillanceCamera[]),
-      optional(this.reports.summarise(area), [] as CommunityReportSummary[]),
+      optional(this.cameraService.findInArea(area), [] as SurveillanceCamera[], budget),
+      optional(this.reports.summarise(area), [] as CommunityReportSummary[], budget),
     ]);
 
     const openPlaceCountByRouteId: Record<string, number> = {};
@@ -111,11 +115,15 @@ export class NoRouteError extends Error {
   readonly status = 404;
 }
 
-async function optional<T>(promise: Promise<T>, fallback: T): Promise<T> {
+async function optional<T>(promise: Promise<T>, fallback: T, budgetMs: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), budgetMs);
+  });
   try {
-    return await promise;
-  } catch {
-    return fallback;
+    return await Promise.race([promise.catch(() => fallback), timeout]);
+  } finally {
+    clearTimeout(timer);
   }
 }
 

@@ -174,6 +174,10 @@ test('the breakdown explains every point and flags what it could not judge', asy
   assert.equal(surveillance?.points, 0);
   assert.ok(surveillance?.excludedReason);
 
+  // The response must say how much of the score rests on data.
+  assert.ok(score.judgedFactorCount < score.factorCount);
+  assert.ok(score.dataCoverage > 0 && score.dataCoverage < 1);
+
   const counted = score.breakdown.filter((item) => !item.excluded);
   const earned = counted.reduce((sum, item) => sum + item.points, 0);
   const available = counted.reduce((sum, item) => sum + item.maxPoints, 0);
