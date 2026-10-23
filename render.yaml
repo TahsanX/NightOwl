@@ -1,0 +1,31 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repo.
+# Only GEOAPIFY_API_KEY has to be entered by hand; everything else is here.
+services:
+  - type: web
+    name: nightowl-api
+    runtime: node
+    plan: free
+    # Closest Render region to Bangladesh.
+    region: singapore
+    # Dev dependencies are needed to compile TypeScript, even in production.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: node apps/backend/dist/server.js
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.11.0
+      - key: NODE_ENV
+        value: production
+      - key: GEOAPIFY_API_KEY
+        sync: false
+      - key: PLACES_PROVIDER
+        value: geoapify
+      - key: REPORT_STORE
+        value: memory
+      - key: TRUST_PROXY_HOPS
+        value: '1'
+      - key: RATE_LIMIT_PER_MINUTE
+        value: '60'
+      - key: OPTIONAL_LAYER_BUDGET_MS
+        value: '5000'

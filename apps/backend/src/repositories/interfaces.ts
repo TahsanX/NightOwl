@@ -3,6 +3,7 @@ import type {
   CommunityReport,
   CommunityReportInput,
   CommunityReportSummary,
+  PlaceSearchResult,
   Poi,
   PoiCategoryDefinition,
   Position,
@@ -36,6 +37,12 @@ export interface PlacesRepository {
 export interface CameraRepository {
   readonly name: string;
   findInBoundingBox(bbox: BoundingBox): Promise<SurveillanceCamera[]>;
+}
+
+export interface GeocodingRepository {
+  readonly name: string;
+  /** Free-text place search, ranked towards `near` when given. */
+  search(text: string, near: Position | undefined, limit: number): Promise<PlaceSearchResult[]>;
 }
 
 export interface CommunityReportRepository {

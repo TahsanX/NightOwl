@@ -13,9 +13,15 @@ import { PlacesController } from './controllers/places.controller.js';
 import { ReportsController } from './controllers/reports.controller.js';
 import { RoutesController } from './controllers/routes.controller.js';
 import { GeoapifyPlacesRepository } from './repositories/geoapify-places.repository.js';
+import {
+  GeoapifyGeocodingRepository,
+  UnavailableGeocodingRepository,
+} from './repositories/geoapify-geocoding.repository.js';
+import { SearchController } from './controllers/search.controller.js';
 import type {
   CameraRepository,
   CommunityReportRepository,
+  GeocodingRepository,
   PlacesRepository,
   RoutingRepository,
 } from './repositories/interfaces.js';
@@ -35,11 +41,19 @@ export interface Container {
   routesController: RoutesController;
   placesController: PlacesController;
   reportsController: ReportsController;
-  providers: { routing: string; places: string; cameras: string; reports: string };
+  searchController: SearchController;
+  providers: {
+    routing: string;
+    places: string;
+    cameras: string;
+    reports: string;
+    geocoding: string;
+  };
 }
 
 /** Providers a caller can supply instead of the env-selected ones, for tests. */
 export interface ContainerOverrides {
+  geocoding?: GeocodingRepository;
   routing?: RoutingRepository;
   places?: PlacesRepository;
   cameras?: CameraRepository;
@@ -71,6 +85,11 @@ export async function createContainer(
   const places = overrides.places ?? createPlacesRepository(env, http, overpass);
   const cameras = overrides.cameras ?? new OverpassCameraRepository(overpass);
   const reports = overrides.reports ?? (await createReportRepository(env));
+  const geocoding =
+    overrides.geocoding ??
+    (env.GEOAPIFY_API_KEY
+      ? new GeoapifyGeocodingRepository(http, env.GEOAPIFY_GEOCODE_URL, env.GEOAPIFY_API_KEY)
+      : new UnavailableGeocodingRepository());
 
   const poiService = new PoiService(
     places,
@@ -98,11 +117,13 @@ export async function createContainer(
     routesController: new RoutesController(planning, categories),
     placesController: new PlacesController(poiService, cameraService, categories),
     reportsController: new ReportsController(reports),
+    searchController: new SearchController(geocoding),
     providers: {
       routing: routing.name,
       places: places.name,
       cameras: cameras.name,
       reports: reports.name,
+      geocoding: geocoding.name,
     },
   };
 }

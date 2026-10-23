@@ -21,6 +21,12 @@ export function RouteComparisonCard({
   onPress,
   onShowBreakdown,
 }: Props) {
+  const heading =
+    route.isFastest && route.isHighestActivity
+      ? 'Fastest and most active route'
+      : route.isHighestActivity
+        ? 'Higher activity route'
+        : 'Fastest route';
   const title = route.isHighestActivity ? 'More listed activity' : 'Quickest option';
 
   return (
@@ -32,8 +38,7 @@ export function RouteComparisonCard({
     >
       <View style={styles.header}>
         <Text style={styles.heading}>
-          {route.isHighestActivity ? 'Higher activity route' : 'Fastest route'} · Comparison rank{' '}
-          {rank}
+          {heading} · Comparison rank {rank}
         </Text>
         <View style={[styles.radio, selected && styles.radioSelected]} />
       </View>

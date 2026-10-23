@@ -17,6 +17,7 @@ const schema = z.object({
   PLACES_PROVIDER: z.enum(['geoapify', 'overpass']).default('geoapify'),
   GEOAPIFY_BASE_URL: z.string().url().default('https://api.geoapify.com/v2'),
   GEOAPIFY_API_KEY: z.string().optional(),
+  GEOAPIFY_GEOCODE_URL: z.string().url().default('https://api.geoapify.com/v1/geocode'),
 
   OVERPASS_BASE_URL: z.string().url().default('https://overpass-api.de/api/interpreter'),
 
@@ -27,6 +28,11 @@ const schema = z.object({
   CAMERAS_CACHE_TTL_S: z.coerce.number().default(86_400),
   UPSTREAM_TIMEOUT_MS: z.coerce.number().default(120_000),
   OPTIONAL_LAYER_BUDGET_MS: z.coerce.number().default(5_000),
+
+  /** Per client IP. The API is public and every request can spend paid quota. */
+  RATE_LIMIT_PER_MINUTE: z.coerce.number().default(60),
+  /** Hops of reverse proxy in front of the app (Render: 1), so client IPs are real. */
+  TRUST_PROXY_HOPS: z.coerce.number().default(0),
 });
 
 export type Env = z.infer<typeof schema>;

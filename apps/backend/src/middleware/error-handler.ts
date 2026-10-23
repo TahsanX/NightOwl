@@ -1,6 +1,7 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import { ZodError } from 'zod';
 import { UpstreamError } from '../lib/http-client.js';
+import { GeocodingUnavailableError } from '../repositories/geoapify-geocoding.repository.js';
 import { NoRouteError } from '../services/route-planning.service.js';
 
 /** Lets controllers be plain async functions without try/catch boilerplate. */
@@ -24,6 +25,11 @@ export function errorHandler(
         message: issue.message,
       })),
     });
+    return;
+  }
+
+  if (error instanceof GeocodingUnavailableError) {
+    res.status(error.status).json({ error: 'search_unavailable', message: error.message });
     return;
   }
 

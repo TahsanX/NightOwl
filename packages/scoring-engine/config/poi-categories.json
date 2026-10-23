@@ -15,7 +15,7 @@
   {
     "id": "clinic",
     "label": "Clinic",
-    "mapIcon": "doctor",
+    "mapIcon": "doctors",
     "mapColor": "#E93D82",
     "tier": "assistance",
     "weight": 1.5,
@@ -40,7 +40,7 @@
   {
     "id": "fire_station",
     "label": "Fire station",
-    "mapIcon": "fire-station",
+    "mapIcon": "fire_station",
     "mapColor": "#D6409F",
     "tier": "assistance",
     "weight": 2.5,
@@ -138,7 +138,7 @@
   {
     "id": "fast_food",
     "label": "Fast food",
-    "mapIcon": "fast-food",
+    "mapIcon": "fast_food",
     "mapColor": "#FFB224",
     "tier": "activity",
     "weight": 1.2,
@@ -198,7 +198,7 @@
   {
     "id": "station",
     "label": "Station",
-    "mapIcon": "rail",
+    "mapIcon": "railway",
     "mapColor": "#0588F0",
     "tier": "transport",
     "weight": 1.5,

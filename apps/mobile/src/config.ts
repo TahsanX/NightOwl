@@ -5,15 +5,13 @@ interface AppConfig {
   mapStyleUrl: string;
 }
 
+const extra = Constants.expoConfig?.extra ?? {};
+
 /**
- * Runtime configuration comes from app.json `extra` (overridable per build),
- * never from literals scattered through the screens.
+ * Runtime configuration, resolved at build time by app.config.ts from the
+ * build profile's environment. Screens read it from here and never hold a URL.
  */
 export const config: AppConfig = {
-  apiBaseUrl:
-    (Constants.expoConfig?.extra?.apiBaseUrl as string | undefined) ??
-    'http://localhost:4000/api/v1',
-  mapStyleUrl:
-    (Constants.expoConfig?.extra?.mapStyleUrl as string | undefined) ??
-    'https://demotiles.maplibre.org/style.json',
+  apiBaseUrl: extra.apiBaseUrl as string,
+  mapStyleUrl: extra.mapStyleUrl as string,
 };

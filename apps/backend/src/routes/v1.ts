@@ -8,8 +8,10 @@ import { asyncHandler } from '../middleware/error-handler.js';
  */
 export function createV1Router(container: Container): Router {
   const router = Router();
-  const { routesController, placesController, reportsController } = container;
+  const { routesController, placesController, reportsController, searchController } =
+    container;
 
+  router.get('/search', asyncHandler(searchController.search));
   router.post('/routes/plan', asyncHandler(routesController.plan));
 
   router.get('/places', asyncHandler(placesController.listInArea));

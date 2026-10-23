@@ -36,6 +36,11 @@ export function useRoutePlan(api: SafeRouteApi) {
     [api, mode],
   );
 
+  const reset = useCallback(() => {
+    setState({ status: 'idle', plan: null, error: null });
+    setSelectedRouteId(null);
+  }, []);
+
   const routes = state.plan?.routes ?? [];
   const selectedRoute = useMemo(
     () => routes.find((route) => route.id === selectedRouteId) ?? routes[0] ?? null,
@@ -49,6 +54,7 @@ export function useRoutePlan(api: SafeRouteApi) {
     mode,
     setMode,
     planRoute,
+    reset,
     routes,
     selectedRoute,
     selectRoute: setSelectedRouteId,

@@ -96,6 +96,19 @@ export interface RoutePlanResponse {
   cameras: FeatureCollection<PointFeature<CameraFeatureProperties>>;
 }
 
+export interface PlaceSearchResult {
+  id: string;
+  /** Primary line, e.g. "Dhaka Medical College Hospital". */
+  name: string;
+  /** Secondary line, e.g. "Bakshibazar, Dhaka". */
+  address: string;
+  position: Position;
+}
+
+export interface PlaceSearchResponse {
+  results: PlaceSearchResult[];
+}
+
 export interface LegendEntry {
   categoryId: string;
   label: string;

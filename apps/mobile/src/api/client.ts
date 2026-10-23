@@ -1,6 +1,8 @@
 import type {
   LegendResponse,
+  PlaceSearchResponse,
   PlanRouteBody,
+  Position,
   RoutePlanResponse,
 } from '@saferoute/shared-types';
 
@@ -12,5 +14,6 @@ import type {
  */
 export interface SafeRouteApi {
   planRoute(body: PlanRouteBody): Promise<RoutePlanResponse>;
+  searchPlaces(text: string, near?: Position, signal?: AbortSignal): Promise<PlaceSearchResponse>;
   legend(): Promise<LegendResponse>;
 }

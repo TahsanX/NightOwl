@@ -3,6 +3,8 @@ import type { AddressInfo } from 'node:net';
 import test from 'node:test';
 import type {
   BoundingBox,
+  PlaceSearchResponse,
+  PlaceSearchResult,
   Poi,
   PoiCategoryDefinition,
   Position,
@@ -15,6 +17,7 @@ import { loadEnv } from '../src/config/env.js';
 import { createContainer } from '../src/container.js';
 import type {
   CameraRepository,
+  GeocodingRepository,
   PlacesRepository,
   RoutingRepository,
 } from '../src/repositories/interfaces.js';
@@ -72,6 +75,17 @@ class FakePlaces implements PlacesRepository {
   }
 }
 
+class FakeGeocoding implements GeocodingRepository {
+  readonly name = 'fake-geocoding';
+  lastNear: Position | undefined;
+  async search(text: string, near: Position | undefined): Promise<PlaceSearchResult[]> {
+    this.lastNear = near;
+    return [
+      { id: 'g1', name: `${text} Hospital`, address: 'Dhaka', position: [90.39, 23.72] },
+    ];
+  }
+}
+
 class EmptyCameras implements CameraRepository {
   readonly name = 'fake-cameras';
   async findInBoundingBox(): Promise<SurveillanceCamera[]> {
@@ -90,9 +104,16 @@ function place(id: string, categoryId: string, fraction: number): Poi {
   };
 }
 
-async function startServer() {
-  const env = loadEnv({ ...process.env, REPORT_STORE: 'memory', NODE_ENV: 'test' });
+async function startServer(envOverrides: Record<string, string> = {}) {
+  const env = loadEnv({
+    ...process.env,
+    REPORT_STORE: 'memory',
+    NODE_ENV: 'test',
+    ...envOverrides,
+  });
+  const geocoding = new FakeGeocoding();
   const container = await createContainer(env, {
+    geocoding,
     routing: new FakeRouting(),
     places: new FakePlaces(),
     cameras: new EmptyCameras(),
@@ -104,9 +125,36 @@ async function startServer() {
 
   return {
     url: `http://127.0.0.1:${port}`,
+    geocoding,
     close: () => new Promise((resolve) => server.close(resolve)),
   };
 }
+
+test('destination search returns places ranked near the traveller', async (t) => {
+  const server = await startServer();
+  t.after(() => server.close());
+
+  const response = await fetch(`${server.url}/api/v1/search?q=Dhaka%20Medical&lon=90.41&lat=23.81`);
+  assert.equal(response.status, 200);
+
+  const body = (await response.json()) as PlaceSearchResponse;
+  assert.equal(body.results[0]?.name, 'Dhaka Medical Hospital');
+  assert.deepEqual(server.geocoding.lastNear, [90.41, 23.81]);
+
+  const tooShort = await fetch(`${server.url}/api/v1/search?q=a`);
+  assert.equal(tooShort.status, 400);
+});
+
+test('clients are rate limited so a public deploy cannot drain the API quota', async (t) => {
+  const server = await startServer({ RATE_LIMIT_PER_MINUTE: '3' });
+  t.after(() => server.close());
+
+  const statuses: number[] = [];
+  for (let i = 0; i < 4; i += 1) {
+    statuses.push((await fetch(`${server.url}/api/v1/places/legend`)).status);
+  }
+  assert.deepEqual(statuses, [200, 200, 200, 429]);
+});
 
 const planBody = {
   origin: [90.4, 23.78],

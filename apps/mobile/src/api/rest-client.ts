@@ -1,6 +1,8 @@
 import type {
   LegendResponse,
+  PlaceSearchResponse,
   PlanRouteBody,
+  Position,
   RoutePlanResponse,
 } from '@saferoute/shared-types';
 import { config } from '../config';
@@ -25,6 +27,15 @@ export class RestSafeRouteApi implements SafeRouteApi {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
+  }
+
+  searchPlaces(text: string, near?: Position, signal?: AbortSignal): Promise<PlaceSearchResponse> {
+    const params = new URLSearchParams({ q: text });
+    if (near) {
+      params.set('lon', String(near[0]));
+      params.set('lat', String(near[1]));
+    }
+    return this.#request<PlaceSearchResponse>(`/search?${params.toString()}`, { signal });
   }
 
   legend(): Promise<LegendResponse> {
