@@ -9,9 +9,9 @@ import type {
   RouteContext,
   ScoringProfile,
 } from '@saferoute/shared-types';
-import { PoiCategories } from '../src/catalogue.ts';
-import { createDefaultRegistry } from '../src/defaults.ts';
-import { ScoringEngine } from '../src/engine.ts';
+// Tests run against the built package: Node's type stripping cannot resolve
+// the `.js` specifiers TypeScript requires in ESM source.
+import { PoiCategories, ScoringEngine, createDefaultRegistry } from '../dist/index.js';
 
 const configDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'config');
 

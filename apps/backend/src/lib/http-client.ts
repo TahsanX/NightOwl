@@ -39,10 +39,15 @@ export class HttpClient {
     }
   }
 
-  async postForm<T>(provider: string, url: string, body: string): Promise<T> {
+  async postForm<T>(
+    provider: string,
+    url: string,
+    body: string,
+    headers: Record<string, string> = {},
+  ): Promise<T> {
     return this.getJson<T>(provider, url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...headers },
       body,
     });
   }

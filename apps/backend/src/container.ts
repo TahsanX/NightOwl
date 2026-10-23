@@ -14,6 +14,7 @@ import { ReportsController } from './controllers/reports.controller.js';
 import { RoutesController } from './controllers/routes.controller.js';
 import { GeoapifyPlacesRepository } from './repositories/geoapify-places.repository.js';
 import type {
+  CameraRepository,
   CommunityReportRepository,
   PlacesRepository,
   RoutingRepository,
@@ -37,12 +38,23 @@ export interface Container {
   providers: { routing: string; places: string; cameras: string; reports: string };
 }
 
+/** Providers a caller can supply instead of the env-selected ones, for tests. */
+export interface ContainerOverrides {
+  routing?: RoutingRepository;
+  places?: PlacesRepository;
+  cameras?: CameraRepository;
+  reports?: CommunityReportRepository;
+}
+
 /**
  * Composition root. Every concrete provider is chosen here and injected as an
  * interface, so nothing below this file knows which vendor is in use — that is
  * what makes a provider swap a one-line change and keeps services testable.
  */
-export async function createContainer(env: Env): Promise<Container> {
+export async function createContainer(
+  env: Env,
+  overrides: ContainerOverrides = {},
+): Promise<Container> {
   const config = new ScoringConfigService();
   const categories = new PoiCategories(await config.categories());
   const engine = new ScoringEngine({
@@ -54,10 +66,11 @@ export async function createContainer(env: Env): Promise<Container> {
   const http = new HttpClient({ timeoutMs: env.UPSTREAM_TIMEOUT_MS });
   const overpass = new OverpassClient(http, env.OVERPASS_BASE_URL);
 
-  const routing: RoutingRepository = new OsrmRoutingRepository(http, env.OSRM_BASE_URL);
-  const places = createPlacesRepository(env, http, overpass);
-  const cameras = new OverpassCameraRepository(overpass);
-  const reports = await createReportRepository(env);
+  const routing: RoutingRepository =
+    overrides.routing ?? new OsrmRoutingRepository(http, env.OSRM_BASE_URL);
+  const places = overrides.places ?? createPlacesRepository(env, http, overpass);
+  const cameras = overrides.cameras ?? new OverpassCameraRepository(overpass);
+  const reports = overrides.reports ?? (await createReportRepository(env));
 
   const poiService = new PoiService(
     places,

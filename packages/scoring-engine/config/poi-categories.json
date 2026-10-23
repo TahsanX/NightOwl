@@ -180,7 +180,7 @@
     "weight": 0.5,
     "providerQueries": {
       "geoapify": ["office"],
-      "overpass": ["office=*"]
+      "overpass": ["office=government", "office=company"]
     }
   },
   {

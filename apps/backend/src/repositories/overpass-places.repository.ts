@@ -29,12 +29,14 @@ export class OverpassPlacesRepository implements PlacesRepository {
       for (const expression of category.providerQueries.overpass ?? []) {
         const filter = tagFilter(expression);
         filterToCategory.set(filter, category.id);
-        statements.push(`node${filter}${area};`, `way${filter}${area};`);
+        // `nwr` is one statement for nodes, ways and relations; issuing them
+        // separately doubles the work the public instance has to schedule.
+        statements.push(`nwr${filter}${area};`);
       }
     }
     if (statements.length === 0) return [];
 
-    const elements = await this.overpass.query(statements);
+    const elements = await this.overpass.queryInBatches(statements);
 
     return elements.flatMap((element) => {
       const position = elementPosition(element);

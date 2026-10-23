@@ -65,6 +65,26 @@ Overpass is a shared volunteer resource: camera results are cached for a day by 
 and queried on coarse bounding boxes. Self-host an Overpass instance before putting real
 traffic through it.
 
+### Working with the public Overpass instance
+
+Measured against `overpass-api.de` while building this, which is worth knowing before you
+debug a failure that is not yours:
+
+- **Anonymous requests are refused with `406`.** Every request sends an identifying
+  `User-Agent`, as the usage policy requires.
+- **A single tag filter over a city-sized box took 35–60 seconds.** The server-side
+  `[timeout:N]` budget is set to 90s accordingly; a query that outruns its own budget is
+  aborted with `502`, which looks like an outage but is self-inflicted.
+- **One query carrying every POI filter will be refused** rather than queued, so places
+  are fetched in batches of four filters, sequentially, with one backoff retry on
+  429/502/503/504.
+- **Sustained use exhausts your slot**, after which requests fail fast with `502` until it
+  frees up. If you are iterating, cache aggressively and expect this.
+
+None of this applies to a self-hosted instance, and Geoapify avoids it entirely. The
+keyless path exists so a fresh clone runs, not so a deployment can lean on a volunteer
+service.
+
 ## Community reports — SafeRoute users
 
 `models/community-report.model.ts`

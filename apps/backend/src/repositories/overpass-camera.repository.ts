@@ -21,8 +21,7 @@ export class OverpassCameraRepository implements CameraRepository {
   async findInBoundingBox(bbox: BoundingBox): Promise<SurveillanceCamera[]> {
     const area = bboxClause(bbox);
     const elements = await this.overpass.query([
-      `node["man_made"="surveillance"]${area};`,
-      `way["man_made"="surveillance"]${area};`,
+      `nwr["man_made"="surveillance"]${area};`,
     ]);
 
     return elements.flatMap((element) => {
