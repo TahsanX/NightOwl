@@ -1,0 +1,44 @@
+# DigitalOcean App Platform spec.
+# Create: DO dashboard -> Apps -> Create App -> GitHub (TahsanX/NightOwl),
+# or:    doctl apps create --spec .do/app.yaml
+# Enter GEOAPIFY_API_KEY in the dashboard when prompted; it is not in the repo.
+name: nightowl-api
+# Bangalore — closest App Platform region to Bangladesh. Change in the UI if needed.
+region: blr
+services:
+  - name: api
+    github:
+      repo: TahsanX/NightOwl
+      branch: main
+      # Redeploys automatically on every push to main.
+      deploy_on_push: true
+    # NODE_ENV=production during build makes a plain `npm ci` skip devDependencies,
+    # but TypeScript (a devDependency) is needed to compile — so include them.
+    build_command: npm ci --include=dev && npm run build
+    run_command: node apps/backend/dist/server.js
+    environment_slug: node-js
+    # Smallest always-on Basic instance (~$5/mo, covered by GitHub Student credit).
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    http_port: 8080
+    health_check:
+      http_path: /health
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "8080"
+      - key: GEOAPIFY_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: PLACES_PROVIDER
+        value: geoapify
+      - key: REPORT_STORE
+        value: memory
+      # App Platform terminates TLS at one proxy hop in front of the app.
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
+      - key: OPTIONAL_LAYER_BUDGET_MS
+        value: "5000"

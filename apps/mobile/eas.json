@@ -8,13 +8,13 @@
       "distribution": "internal",
       "android": { "buildType": "apk" },
       "env": {
-        "API_BASE_URL": "https://nightowl-api.onrender.com/api/v1"
+        "API_BASE_URL": "https://REPLACE-WITH-DIGITALOCEAN-URL.ondigitalocean.app/api/v1"
       }
     },
     "production": {
       "android": { "buildType": "app-bundle" },
       "env": {
-        "API_BASE_URL": "https://nightowl-api.onrender.com/api/v1"
+        "API_BASE_URL": "https://REPLACE-WITH-DIGITALOCEAN-URL.ondigitalocean.app/api/v1"
       }
     }
   }
