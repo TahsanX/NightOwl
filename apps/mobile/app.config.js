@@ -1,10 +1,7 @@
-import type { ConfigContext, ExpoConfig } from 'expo/config';
+// Build-time configuration. Values come from the environment (set per build
+// profile in eas.json, or in your shell for local runs) — the app source never
+// names a server. Plain JS so both `expo` and `eas` read it without a TS step.
 
-/**
- * Build-time configuration. Values come from the environment (set per build
- * profile in eas.json, or in your shell for local runs) — the app source never
- * names a server.
- */
 const API_BASE_URL = process.env.API_BASE_URL ?? 'http://localhost:4000/api/v1';
 const MAP_STYLE_URL =
   process.env.MAP_STYLE_URL ?? 'https://tiles.openfreemap.org/styles/dark';
@@ -12,7 +9,8 @@ const MAP_STYLE_URL =
 const LOCATION_REASON =
   'NightOwl uses your location to plan routes from where you are and to show help points nearby.';
 
-export default ({ config }: ConfigContext): ExpoConfig => ({
+/** @type {import('expo/config').ConfigContext['config'] extends never ? never : any} */
+module.exports = ({ config }) => ({
   ...config,
   name: 'NightOwl',
   slug: 'nightowl',
@@ -54,9 +52,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ['expo-location', { locationWhenInUsePermission: LOCATION_REASON }],
     '@maplibre/maplibre-react-native',
   ],
+  owner: 'tahsan_x0',
   extra: {
     apiBaseUrl: API_BASE_URL,
     mapStyleUrl: MAP_STYLE_URL,
-    eas: { projectId: process.env.EAS_PROJECT_ID },
+    eas: { projectId: '20b0f775-4a8a-4ef0-a52b-e5b5d29af7fd' },
   },
+  updates: { url: 'https://u.expo.dev/20b0f775-4a8a-4ef0-a52b-e5b5d29af7fd' },
+  runtimeVersion: { policy: 'appVersion' },
 });
